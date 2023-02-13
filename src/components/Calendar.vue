@@ -6,7 +6,7 @@ import { useManageStore } from "../stores/manage.js";
 const calendarStore = useCalendarStore();
 const manageStore = useManageStore();
 const { nextMonth, prevMonth, setMonthDays } = calendarStore;
-const { getRecordDetail } = manageStore;
+const { getRecordList } = manageStore;
 const { nowYear, nowMonth, weekName, dateTable } = storeToRefs(calendarStore);
 
 onMounted(() => {
@@ -70,7 +70,7 @@ const dateToString = computed(() => {
           <div
             class="date"
             :class="{ today: day.today, 'gray-font': day.disable }"
-            @click="getRecordDetail(day.date)"
+            @click="getRecordList(day.date)"
           >
             {{ dateToString(day.date) }}
           </div>

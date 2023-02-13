@@ -3,7 +3,7 @@ import { storeToRefs } from "pinia";
 import { onMounted } from "vue";
 import { useManageStore } from "../stores/manage.js";
 const manageStore = useManageStore();
-const { setRecordDetail } = manageStore;
+const { setRecordDetail, editRecordDetail } = manageStore;
 const {
   recordDate,
   recordConsumeType,
@@ -11,6 +11,7 @@ const {
   recordMoney,
   recordMemo,
   totalMoney,
+  isEdit,
   optionConsumeType,
   optionPayType,
 } = storeToRefs(manageStore);
@@ -29,7 +30,12 @@ const moneyFormat = new Intl.NumberFormat("en-US", {
       <div>
         <div class="Record-InputItem">
           <label for="record_ID">花費日期</label>
-          <input id="record_ID" type="date" v-model="recordDate" />
+          <input
+            id="record_ID"
+            :disabled="isEdit"
+            type="date"
+            v-model="recordDate"
+          />
         </div>
         <div class="Record-InputItem">
           <label for="record_consume">消費種類</label>
@@ -59,7 +65,10 @@ const moneyFormat = new Intl.NumberFormat("en-US", {
         </div>
 
         <div class="Record-btn">
-          <button type="button" @click="setRecordDetail">新增</button>
+          <button type="button" v-if="isEdit" @click="editRecordDetail">
+            修改
+          </button>
+          <button type="button" v-else @click="setRecordDetail">新增</button>
         </div>
       </div>
     </div>
@@ -97,6 +106,10 @@ select {
   padding: 0.5rem 1rem;
   border: none;
   border-radius: 5px;
+}
+.Record-InputItem label {
+  font-size: 18px;
+  font-weight: 700;
 }
 .Record-btn {
   width: 100%;

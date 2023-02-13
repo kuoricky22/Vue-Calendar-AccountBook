@@ -4,7 +4,8 @@ import { ref, watch } from "vue";
 import { useManageStore } from "../stores/manage.js";
 
 const manageStore = useManageStore();
-const { recordDetail } = storeToRefs(manageStore);
+const { getRecordDetail, deleteRecordDetail } = manageStore;
+const { recordList } = storeToRefs(manageStore);
 
 const hasData = ref(false);
 
@@ -14,17 +15,17 @@ const moneyFormat = new Intl.NumberFormat("en-US", {
   currency: "USD",
 });
 
-watch(recordDetail, (nV, oV) => {
+watch(recordList, (nV, oV) => {
   nV.length != 0 ? (hasData.value = true) : (hasData.value = false);
 });
 </script>
 
 <template>
   <div class="Record-Box">
-    <div v-if="hasData" v-for="(detail, index) in recordDetail">
+    <div v-if="hasData" v-for="(detail, index) in recordList">
       <div class="Record-Item" :class="'color-' + detail.ConsumeType">
         <div class="Record-head">
-          <button class="close"></button>
+          <button class="close" @click="deleteRecordDetail(detail.id)"></button>
           第{{ index + 1 }}項
         </div>
         <div class="Record-main">
@@ -35,7 +36,9 @@ watch(recordDetail, (nV, oV) => {
             金額：{{ moneyFormat.format(detail.Money) }}元
           </div>
           <div class="Record-detail memo">備註：{{ detail.Memo }}</div>
-          <div class="Record-detail btn"><button>編輯</button></div>
+          <div class="Record-detail btn">
+            <button @click="getRecordDetail(detail.id)">編輯</button>
+          </div>
         </div>
       </div>
     </div>
@@ -113,6 +116,7 @@ watch(recordDetail, (nV, oV) => {
   border: none;
   font-weight: 700;
   font-size: 16px;
+  cursor: pointer;
 }
 .Record-detail.btn button:hover {
   color: #fff;
@@ -128,6 +132,7 @@ watch(recordDetail, (nV, oV) => {
   border: none;
   background-color: transparent;
   opacity: 0.3;
+  cursor: pointer;
 }
 .Record-head .close:hover {
   opacity: 1;

@@ -12,7 +12,9 @@ export const useManageStore = defineStore("manage", () => {
   const recordMoney = ref("");
   const recordMemo = ref("");
 
-  const recordDetail = ref([]);
+  const recordList = ref([]);
+  const recordDetailID = ref("");
+  const isEdit = ref(false);
   const totalMoney = ref(0);
 
   function setRecordDetail() {
@@ -30,17 +32,67 @@ export const useManageStore = defineStore("manage", () => {
       }
     });
     totalMoney.value += parseInt(recordMoney.value);
-    getRecordDetail(recordDate.value)
+    getRecordList(recordDate.value);
   }
 
-  function getRecordDetail(recordDate){
-    calendarStore.dateTable.map((item) =>{
-      if(item.date === recordDate){
-        recordDetail.value = item.accountList;
+  function editRecordDetail() {
+    let editDate = "";
+
+    recordList.value.map((item) => {
+      if (item.id === recordDetailID.value) {
+        editDate = item.date
+        totalMoney.value -= item.Money
+
+        item.ConsumeType = recordConsumeType.value;
+        item.PayType = recordPayType.value;
+        item.Money = recordMoney.value;
+        item.Memo = recordMemo.value;
       }
-    })
+    });
+    
+    isEdit.value = false;
+    totalMoney.value += parseInt(recordMoney.value);
+    setAccountList(recordDate.value);
+    getRecordList(editDate);
   }
-  
+
+function deleteRecordDetail(id) {
+  totalMoney.value -= recordList.value.find((item) => item.id === id).Money
+  recordList.value = recordList.value.filter((item) => item.id !== id);
+
+  setAccountList(recordDate.value);
+}
+
+  function getRecordList(recordDate) {
+    calendarStore.dateTable.map((item) => {
+      if (item.date === recordDate) {
+        recordList.value = item.accountList;
+      }
+    });
+  }
+
+  function getRecordDetail(id) {
+    recordList.value.map((item) => {
+      if (item.id === id) {
+        recordDetailID.value = item.id;
+        recordDate.value = item.date;
+        recordConsumeType.value = item.ConsumeType;
+        recordPayType.value = item.PayType;
+        recordMoney.value = item.Money;
+        recordMemo.value = item.Memo;
+      }
+    });
+    isEdit.value = true
+  }
+
+  function setAccountList(date){
+    calendarStore.dateTable.map((item) => {
+      if (item.date === date) {
+         item.accountList = recordList.value;
+      }
+    });
+  }
+
   const optionConsumeType = ref([
     { value: "A", text: "飲食" },
     { value: "B", text: "娛樂" },
@@ -61,11 +113,15 @@ export const useManageStore = defineStore("manage", () => {
     recordPayType,
     recordMoney,
     recordMemo,
-    recordDetail,
+    recordList,
     totalMoney,
+    isEdit,
     optionConsumeType,
     optionPayType,
     setRecordDetail,
-    getRecordDetail
+    getRecordDetail,
+    editRecordDetail,
+    deleteRecordDetail,
+    getRecordList,
   };
 });
