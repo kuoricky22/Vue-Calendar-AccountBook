@@ -1,26 +1,20 @@
 <script setup>
 import Calendar from "./components/Calendar.vue";
-import RecordForm from "./components/RecordForm.vue";
 import ShowRecordList from "./components/ShowRecordList.vue";
+import ShareModalVue from "./components/ShareModal.vue";
 </script>
 
 <template>
   <main>
-    <RecordForm />
-    <div class="Record-Warpper">
-      <Calendar />
-      <ShowRecordList />
-    </div>
+    <Calendar />
+    <ShowRecordList />
   </main>
+  <ShareModalVue />
 </template>
 
 <style scoped>
 header {
   line-height: 1.5;
-}
-.Record-Warpper {
-  display: flex;
-  flex-direction: column;
 }
 .logo {
   display: block;

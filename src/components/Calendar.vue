@@ -84,7 +84,7 @@ const dateToString = computed(() => {
 <style>
 .calenderBox {
   width: 100%;
-  height: 49.5%;
+  height: 100%;
   margin-bottom: 1%;
   padding: 2.5rem 1.5rem;
   border-radius: 10px;

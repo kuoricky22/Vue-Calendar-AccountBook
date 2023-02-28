@@ -2,10 +2,14 @@
 import { storeToRefs } from "pinia";
 import { ref, watch } from "vue";
 import { useManageStore } from "../stores/manage.js";
+import { useModalStore } from "../stores/modal.js";
 
 const manageStore = useManageStore();
 const { getRecordDetail, deleteRecordDetail } = manageStore;
 const { recordList } = storeToRefs(manageStore);
+
+const modalStore = useModalStore();
+const { showModal } = modalStore;
 
 const hasData = ref(false);
 
@@ -22,6 +26,15 @@ watch(recordList, (nV, oV) => {
 
 <template>
   <div class="Record-Box">
+    <div class="Record-Item-Add text-end">
+      <button
+        class="btn btn-secondary"
+        type="button"
+        @click="showModal('Create')"
+      >
+        新增帳務
+      </button>
+    </div>
     <div v-if="hasData" v-for="(detail, index) in recordList">
       <div class="Record-Item" :class="'color-' + detail.ConsumeType">
         <div class="Record-head">
@@ -36,14 +49,19 @@ watch(recordList, (nV, oV) => {
             金額：{{ moneyFormat.format(detail.Money) }}元
           </div>
           <div class="Record-detail memo">備註：{{ detail.Memo }}</div>
-          <div class="Record-detail btn">
-            <button @click="getRecordDetail(detail.id)">編輯</button>
+          <div class="Record-detail">
+            <button
+              class="btn btn-success w-100"
+              @click="showModal('Edit', detail.id)"
+            >
+              編輯
+            </button>
           </div>
         </div>
       </div>
     </div>
     <div class="Record-NoData" v-else>
-      <h2>查無資料</h2>
+      <h2 style="color: #fcfcfc">查無資料</h2>
     </div>
   </div>
 </template>
@@ -51,8 +69,7 @@ watch(recordList, (nV, oV) => {
 <style>
 .Record-Box {
   width: 100%;
-  height: 49.5%;
-  margin-top: 1%;
+  height: 100%;
   padding: 1rem 1.5rem;
   border-radius: 5px;
   background-color: #262626;
@@ -109,19 +126,6 @@ watch(recordList, (nV, oV) => {
 .Record-detail.btn {
   text-align: end;
   grid-area: btn;
-}
-.Record-detail.btn button {
-  padding: 0.5rem 1.5rem;
-  border-radius: 15px;
-  border: none;
-  font-weight: 700;
-  font-size: 16px;
-  cursor: pointer;
-}
-.Record-detail.btn button:hover {
-  color: #fff;
-  background-color: #555273;
-  box-shadow: rgba(0, 0, 0, 0.25) 0 8px 15px;
 }
 .Record-head .close {
   position: absolute;

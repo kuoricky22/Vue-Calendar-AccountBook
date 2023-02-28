@@ -47,7 +47,7 @@ const moneyFormat = new Intl.NumberFormat("en-US", {
           </select>
         </div>
         <div class="Record-InputItem">
-          <label for="record_pay">花費方式</label>
+          <label class="form-label" for="record_pay">花費方式</label>
           <select id="record_pay" v-model="recordPayType">
             <option value="" disabled selected>請選擇</option>
             <option v-for="pay in optionPayType" :value="pay.value">
@@ -68,7 +68,14 @@ const moneyFormat = new Intl.NumberFormat("en-US", {
           <button type="button" v-if="isEdit" @click="editRecordDetail">
             修改
           </button>
-          <button type="button" v-else @click="setRecordDetail">新增</button>
+          <button
+            type="button"
+            class="btn btn-outline-secondary px-5 py-3"
+            v-else
+            @click="setRecordDetail"
+          >
+            新增
+          </button>
         </div>
       </div>
     </div>
@@ -117,7 +124,7 @@ select {
   display: flex;
   justify-content: end;
 }
-.Record-btn button {
+/* .Record-btn button {
   appearance: none;
   background-color: transparent;
   border: 2px solid #1a1a1a;
@@ -160,7 +167,7 @@ select {
 .Record-btn button:active {
   box-shadow: none;
   transform: translateY(0);
-}
+} */
 .Total-Money {
   width: 100%;
   height: 20%;
@@ -169,5 +176,13 @@ select {
   align-items: center;
   font-size: 32px;
   font-weight: bold;
+}
+.Total-Money div {
+  padding: 10px 15px;
+  border: none;
+  border-radius: 5px;
+  box-shadow: 3px 3px 12px rgba(255, 255, 255, 0.5);
+  color: #3b3b3b;
+  background-color: #ececec;
 }
 </style>

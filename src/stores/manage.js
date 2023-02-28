@@ -2,9 +2,11 @@ import { ref, reactive } from "vue";
 import { uuid } from "vue-uuid";
 import { defineStore } from "pinia";
 import { useCalendarStore } from "../stores/calendar.js";
+import { useModalStore } from "../stores/modal";
 
 export const useManageStore = defineStore("manage", () => {
   const calendarStore = useCalendarStore();
+  const modalStore = useModalStore();
 
   const recordDate = ref("");
   const recordConsumeType = ref("");
@@ -33,6 +35,7 @@ export const useManageStore = defineStore("manage", () => {
     });
     totalMoney.value += parseInt(recordMoney.value);
     getRecordList(recordDate.value);
+    modalStore.closeModal();
   }
 
   function editRecordDetail() {
@@ -54,6 +57,7 @@ export const useManageStore = defineStore("manage", () => {
     totalMoney.value += parseInt(recordMoney.value);
     setAccountList(recordDate.value);
     getRecordList(editDate);
+    modalStore.closeModal();
   }
 
 function deleteRecordDetail(id) {
